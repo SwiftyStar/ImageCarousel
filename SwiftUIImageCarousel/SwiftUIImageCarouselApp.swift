@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftUIImageCarouselApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ExampleScreen()
         }
     }
 }
