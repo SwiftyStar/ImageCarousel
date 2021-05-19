@@ -7,19 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5CE876F2651DDDC00C9C77B /* ImageCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */; };
 		A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */; };
 		A5E6044A264D5D60003AA821 /* ExampleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60449264D5D60003AA821 /* ExampleScreen.swift */; };
 		A5E6044C264D5D61003AA821 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E6044B264D5D61003AA821 /* Assets.xcassets */; };
 		A5E6044F264D5D61003AA821 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E6044E264D5D61003AA821 /* Preview Assets.xcassets */; };
+		A5E6045B264D6423003AA821 /* ImageCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E6045A264D6423003AA821 /* ImageCarousel.swift */; };
+		A5E60464264D6BC5003AA821 /* IdentifiableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselViewModel.swift; sourceTree = "<group>"; };
 		A5E60444264D5D60003AA821 /* SwiftUIImageCarousel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIImageCarousel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIImageCarouselApp.swift; sourceTree = "<group>"; };
 		A5E60449264D5D60003AA821 /* ExampleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleScreen.swift; sourceTree = "<group>"; };
 		A5E6044B264D5D61003AA821 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5E6044E264D5D61003AA821 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A5E60450264D5D61003AA821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5E6045A264D6423003AA821 /* ImageCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarousel.swift; sourceTree = "<group>"; };
+		A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +60,7 @@
 			children = (
 				A5E60457264D607D003AA821 /* Screens */,
 				A5E60458264D6083003AA821 /* Views */,
+				A5E60462264D6BB0003AA821 /* Models */,
 				A5E60459264D6087003AA821 /* ViewModels */,
 				A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */,
 				A5E6044B264D5D61003AA821 /* Assets.xcassets */,
@@ -82,6 +89,7 @@
 		A5E60458264D6083003AA821 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A5E6045A264D6423003AA821 /* ImageCarousel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -89,8 +97,17 @@
 		A5E60459264D6087003AA821 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A5E60462264D6BB0003AA821 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,8 +179,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5E6045B264D6423003AA821 /* ImageCarousel.swift in Sources */,
+				A5CE876F2651DDDC00C9C77B /* ImageCarouselViewModel.swift in Sources */,
 				A5E6044A264D5D60003AA821 /* ExampleScreen.swift in Sources */,
 				A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */,
+				A5E60464264D6BC5003AA821 /* IdentifiableImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +313,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUIImageCarousel/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftUIImageCarousel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -314,6 +335,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUIImageCarousel/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftUIImageCarousel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
