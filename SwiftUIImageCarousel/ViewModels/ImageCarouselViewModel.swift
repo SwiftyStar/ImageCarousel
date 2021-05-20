@@ -10,26 +10,35 @@ import SwiftUI
 final class ImageCarouselViewModel {
     private let imageInset: CGFloat?
     private let imageWidth: CGFloat?
+    private let aspectRatio: CGFloat?
     private var lastTranslationWidth: CGFloat = 0
     
-    init(imageInset: CGFloat?, imageWidth: CGFloat?) {
+    init(imageInset: CGFloat?, imageWidth: CGFloat?, aspectRatio: CGFloat?) {
         self.imageInset = imageInset
         self.imageWidth = imageWidth
+        self.aspectRatio = aspectRatio
     }
     
     func getImageInset() -> CGFloat? {
         self.imageInset
     }
-    
-    func getImageWidth() -> CGFloat? {
-        self.imageWidth
-    }
         
-    func getImageWidth(for geometry: GeometryProxy) -> CGFloat {
+    func getImageSize(for geometry: GeometryProxy) -> CGSize {
         let totalInset = 2 * (self.imageInset ?? 0)
         let defaultWidth = geometry.size.width - totalInset
+        let width = self.imageWidth ?? defaultWidth
         
-        return self.imageWidth ?? defaultWidth
+        let maxHeight = geometry.size.height
+        let height: CGFloat
+        if let ratio = self.aspectRatio {
+            let proposedHeight = width / ratio
+            let safeHeight = min(maxHeight, proposedHeight)
+            height = safeHeight
+        } else {
+            height = maxHeight
+        }
+        
+        return CGSize(width: width, height: height)
     }
     
     func getDragOffset(for dragValue: DragGesture.Value, currentOffset: CGFloat, imageCount: Int, geometry: GeometryProxy) -> CGFloat {
@@ -78,7 +87,7 @@ final class ImageCarouselViewModel {
     }
     
     private func getTotalWidthOfEachImage(for geometry: GeometryProxy) -> CGFloat {
-        let widthOfEachImage = self.getImageWidth(for: geometry)
+        let widthOfEachImage = self.getImageSize(for: geometry).width
         let insetForEachImage = 2 * (self.imageInset ?? 0)
         return widthOfEachImage + insetForEachImage
     }

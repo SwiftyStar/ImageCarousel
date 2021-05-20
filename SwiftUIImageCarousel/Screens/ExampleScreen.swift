@@ -15,7 +15,6 @@ struct ExampleScreen: View {
                 .frame(height: 24)
             Text("Some Kitties")
             Spacer()
-                .frame(height: 32)
         }
     }
     
@@ -28,11 +27,11 @@ struct ExampleScreen: View {
         let identifiableImages = images.map { IdentifiableImage(image: $0) }
         
         VStack {
+            let aspectRatio: CGFloat = 4 / 3
             ImageCarousel(images: .constant(identifiableImages))
                 .onImageTap { print($0) }
-                .imageInset(8)
-                .frame(height: 480)
-                .background(Color.black.opacity(0.33))
+                .imageDimensions(inset: 8, aspectRatio: aspectRatio)
+                .frame(height: UIScreen.main.bounds.width / aspectRatio)
             
             self.titleText
         }

@@ -10,28 +10,13 @@ import SwiftUI
 struct ImageCarousel: View {
     typealias ImageTapAction = ((AnyHashable) -> Void)
 
-    @Binding private var images: [IdentifiableImage]
-    @State private var scrollOffset: CGFloat = 0
+    @Binding var images: [IdentifiableImage]
+    @State var scrollOffset: CGFloat = 0
 
-    private let onImageTap: ImageTapAction?
-    private let backgroundColor: Color
-    private let viewModel: ImageCarouselViewModel
+    var onImageTap: ImageTapAction?
+    var viewModel: ImageCarouselViewModel = ImageCarouselViewModel(imageInset: nil, imageWidth: nil, aspectRatio: nil)
     
-    init(images: Binding<[IdentifiableImage]>) {
-        self._images = images
-        self.onImageTap = nil
-        self.backgroundColor = Color.clear
-        self.viewModel = ImageCarouselViewModel(imageInset: nil, imageWidth: nil)
-    }
-    
-    private init(images: Binding<[IdentifiableImage]>, backgroundColor: Color, imageWidth: CGFloat?, imageInset: CGFloat?, onImageTap: ImageTapAction?) {
-        self._images = images
-        self.backgroundColor = backgroundColor
-        self.viewModel = ImageCarouselViewModel(imageInset: imageInset, imageWidth: imageWidth)
-        self.onImageTap = onImageTap
-    }
-    
-    private var carousel: some View {
+    var body: some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 self.getContent(for: geometry)
@@ -46,18 +31,10 @@ struct ImageCarousel: View {
         }
     }
     
-    var body: some View {
-        ZStack {
-            self.backgroundColor
-            self.carousel
-        }
-    }
-    
     private func getContent(for geometry: GeometryProxy) -> some View {
         ForEach(self.images) { image in
             VStack {
-                Spacer()
-                    .frame(minHeight: 0)
+                Spacer(minLength: 0)
                 
                 if let inset = self.viewModel.getImageInset() {
                     self.getInsetImage(image, inset: inset, geometry: geometry)
@@ -65,19 +42,22 @@ struct ImageCarousel: View {
                     self.getImage(image, geometry: geometry)
                 }
                 
-                Spacer()
-                    .frame(minHeight: 0)
+                Spacer(minLength: 0)
             }
         }
     }
     
     private func getInsetImage(_ image: IdentifiableImage, inset: CGFloat, geometry: GeometryProxy) -> some View {
         HStack(alignment: .top) {
+            let size = self.viewModel.getImageSize(for: geometry)
+            let width = size.width
+            let height = size.height
+            
             Spacer()
                 .frame(width: inset)
             image.image
                 .resizable()
-                .frame(width: self.viewModel.getImageWidth(for: geometry), height: geometry.size.height)
+                .frame(width: width, height: height)
                 .aspectRatio(contentMode: .fill)
             Spacer()
                 .frame(width: inset)
@@ -87,9 +67,13 @@ struct ImageCarousel: View {
     }
     
     private func getImage(_ image: IdentifiableImage, geometry: GeometryProxy) -> some View {
-        image.image
+        let size = self.viewModel.getImageSize(for: geometry)
+        let width = size.width
+        let height = size.height
+        
+        return image.image
             .resizable()
-            .frame(width: self.viewModel.getImageWidth(for: geometry), height: geometry.size.height)
+            .frame(width: width, height: height)
             .aspectRatio(contentMode: .fill)
             .onTapGesture { self.onImageTap?(image.id) }
     }
@@ -108,37 +92,5 @@ struct ImageCarousel: View {
                                                                  geometry: geometry,
                                                                  imageCount: self.images.count)
         }
-    }
-    
-    func onImageTap(_ action: ImageTapAction?) -> ImageCarousel {
-        ImageCarousel(images: self.$images,
-                      backgroundColor: self.backgroundColor,
-                      imageWidth: self.viewModel.getImageWidth(),
-                      imageInset: self.viewModel.getImageInset(),
-                      onImageTap: action)
-    }
-    
-    func imageWidth(_ width: CGFloat?) -> ImageCarousel {
-        ImageCarousel(images: self.$images,
-                      backgroundColor: self.backgroundColor,
-                      imageWidth: width,
-                      imageInset: self.viewModel.getImageInset(),
-                      onImageTap: self.onImageTap)
-    }
-    
-    func imageInset(_ inset: CGFloat?) -> ImageCarousel {
-        ImageCarousel(images: self.$images,
-                      backgroundColor: self.backgroundColor,
-                      imageWidth: self.viewModel.getImageWidth(),
-                      imageInset: inset,
-                      onImageTap: self.onImageTap)
-    }
-    
-    func backgroundColor(_ color: Color) -> ImageCarousel {
-        ImageCarousel(images: self.$images,
-                      backgroundColor: color,
-                      imageWidth: self.viewModel.getImageWidth(),
-                      imageInset: self.viewModel.getImageInset(),
-                      onImageTap: self.onImageTap)
     }
 }
