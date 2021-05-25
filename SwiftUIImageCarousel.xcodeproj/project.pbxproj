@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A5CE876F2651DDDC00C9C77B /* ImageCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */; };
+		A5CF09002657239B003F00FE /* CarouselDragValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */; };
 		A5DF36852655DB7B0093CB12 /* ImageCarousel+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF36842655DB7B0093CB12 /* ImageCarousel+Modifiers.swift */; };
+		A5DF36872655EF6B0093CB12 /* CarouselPagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF36862655EF6B0093CB12 /* CarouselPagingView.swift */; };
 		A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */; };
 		A5E6044A264D5D60003AA821 /* ExampleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60449264D5D60003AA821 /* ExampleScreen.swift */; };
 		A5E6044C264D5D61003AA821 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E6044B264D5D61003AA821 /* Assets.xcassets */; };
@@ -19,7 +21,9 @@
 
 /* Begin PBXFileReference section */
 		A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselViewModel.swift; sourceTree = "<group>"; };
+		A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselDragValue.swift; sourceTree = "<group>"; };
 		A5DF36842655DB7B0093CB12 /* ImageCarousel+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCarousel+Modifiers.swift"; sourceTree = "<group>"; };
+		A5DF36862655EF6B0093CB12 /* CarouselPagingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselPagingView.swift; sourceTree = "<group>"; };
 		A5E60444264D5D60003AA821 /* SwiftUIImageCarousel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIImageCarousel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIImageCarouselApp.swift; sourceTree = "<group>"; };
 		A5E60449264D5D60003AA821 /* ExampleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleScreen.swift; sourceTree = "<group>"; };
@@ -93,6 +97,7 @@
 			children = (
 				A5E6045A264D6423003AA821 /* ImageCarousel.swift */,
 				A5DF36842655DB7B0093CB12 /* ImageCarousel+Modifiers.swift */,
+				A5DF36862655EF6B0093CB12 /* CarouselPagingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -109,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */,
+				A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -185,6 +191,8 @@
 				A5DF36852655DB7B0093CB12 /* ImageCarousel+Modifiers.swift in Sources */,
 				A5E6045B264D6423003AA821 /* ImageCarousel.swift in Sources */,
 				A5CE876F2651DDDC00C9C77B /* ImageCarouselViewModel.swift in Sources */,
+				A5CF09002657239B003F00FE /* CarouselDragValue.swift in Sources */,
+				A5DF36872655EF6B0093CB12 /* CarouselPagingView.swift in Sources */,
 				A5E6044A264D5D60003AA821 /* ExampleScreen.swift in Sources */,
 				A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */,
 				A5E60464264D6BC5003AA821 /* IdentifiableImage.swift in Sources */,

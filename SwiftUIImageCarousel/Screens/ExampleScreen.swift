@@ -19,18 +19,14 @@ struct ExampleScreen: View {
     }
     
     var body: some View {
-        let images = [Image("Kitten1"),
-                      Image("Kitten2"),
-                      Image("Kitten3"),
-                      Image("Kitten4"),
-                      Image("Kitten5")]
-        let identifiableImages = images.map { IdentifiableImage(image: $0) }
+        
         
         VStack {
             let aspectRatio: CGFloat = 4 / 3
-            ImageCarousel(images: .constant(identifiableImages))
+            ImageCarousel(images: .constant(IdentifiableImage.testImages))
                 .onImageTap { print($0) }
                 .imageDimensions(inset: 8, aspectRatio: aspectRatio)
+                .hasPaging(true)
                 .frame(height: UIScreen.main.bounds.width / aspectRatio)
             
             self.titleText

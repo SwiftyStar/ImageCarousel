@@ -19,4 +19,10 @@ extension ImageCarousel {
         mutable.onImageTap = action
         return mutable
     }
+    
+    func hasPaging(_ paging: Bool) -> ImageCarousel {
+        var mutable = self
+        mutable.hasPaging = paging
+        return mutable
+    }
 }

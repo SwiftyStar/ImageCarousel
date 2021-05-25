@@ -11,23 +11,41 @@ struct ImageCarousel: View {
     typealias ImageTapAction = ((AnyHashable) -> Void)
 
     @Binding var images: [IdentifiableImage]
-    @State var scrollOffset: CGFloat = 0
-
+    @State var currentImage: Int = 0
+    @State var offset: CGFloat = 0
+    
+    init(images: Binding<[IdentifiableImage]>) {
+        self._images = images
+    }
+    
     var onImageTap: ImageTapAction?
+    var hasPaging: Bool = false
     var viewModel: ImageCarouselViewModel = ImageCarouselViewModel(imageInset: nil, imageWidth: nil, aspectRatio: nil)
     
-    var body: some View {
+    private var carousel: some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 self.getContent(for: geometry)
             }
-            .offset(x: self.scrollOffset)
+            .offset(x: self.offset)
             .gesture(
                 DragGesture()
                     .onChanged { self.draggingChanged($0, geometry: geometry)}
                     .onEnded { self.draggingEnded($0, geometry: geometry)}
             )
             .animation(.linear(duration: 0.2))
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            self.carousel
+
+            if self.hasPaging {
+                Spacer()
+                    .frame(height: 8)
+                CarouselPagingView(images: self.$images, currentImage: self.$currentImage)
+            }
         }
     }
     
@@ -79,18 +97,24 @@ struct ImageCarousel: View {
     }
     
     private func draggingChanged(_ newValue: DragGesture.Value, geometry: GeometryProxy) {
-        self.scrollOffset = self.viewModel.getDragOffset(for: newValue,
-                                                         currentOffset: self.scrollOffset,
-                                                         imageCount: self.images.count,
-                                                         geometry: geometry)
+        let carouselDragValue = self.viewModel.getDragValue(for: newValue,
+                                                             currentOffset: self.offset,
+                                                             imageCount: self.images.count,
+                                                             geometry: geometry)
+        
+        self.offset = carouselDragValue.offset
+        self.currentImage = carouselDragValue.currentImage
     }
     
     private func draggingEnded(_ finalValue: DragGesture.Value, geometry: GeometryProxy) {
-        withAnimation {
-            self.scrollOffset = self.viewModel.getFinalDragValue(for: finalValue,
-                                                                 scrollOffset: self.scrollOffset,
+        let carouselDragValue = self.viewModel.getFinalDragValue(for: finalValue,
+                                                                 scrollOffset: self.offset,
                                                                  geometry: geometry,
                                                                  imageCount: self.images.count)
+        
+        self.currentImage = carouselDragValue.currentImage
+        withAnimation {
+            self.offset = carouselDragValue.offset
         }
     }
 }
