@@ -9,18 +9,24 @@ import SwiftUI
 
 struct ImageCarousel: View {
     typealias ImageTapAction = ((AnyHashable) -> Void)
-
-    @Binding var images: [IdentifiableImage]
-    @State var currentImage: Int = 0
-    @State var offset: CGFloat = 0
     
-    init(images: Binding<[IdentifiableImage]>) {
-        self._images = images
-    }
+    @Binding var images: [IdentifiableImage]
+    @Binding var currentImage: Int
+    let totalImages: Int
+
+    @State private var offset: CGFloat = 0
+    @State private var lastTranslation: CGFloat = 0
+    private let viewModel: ImageCarouselViewModel = ImageCarouselViewModel()
     
     var onImageTap: ImageTapAction?
     var hasPaging: Bool = false
-    var viewModel: ImageCarouselViewModel = ImageCarouselViewModel(imageInset: nil, imageWidth: nil, aspectRatio: nil)
+    var imageDimensions = ImageDimensions(width: nil, inset: nil, aspectRatio: nil)
+    
+    init(images: Binding<[IdentifiableImage]>, currentImage: Binding<Int>, totalImages: Int) {
+        self._images = images
+        self._currentImage = currentImage
+        self.totalImages = totalImages
+    }
     
     private var carousel: some View {
         GeometryReader { geometry in
@@ -40,11 +46,11 @@ struct ImageCarousel: View {
     var body: some View {
         VStack {
             self.carousel
-
+            
             if self.hasPaging {
                 Spacer()
                     .frame(height: 8)
-                CarouselPagingView(images: self.$images, currentImage: self.$currentImage)
+                CarouselPagingView(currentImage: self.$currentImage, totalImages: self.totalImages)
             }
         }
     }
@@ -54,7 +60,7 @@ struct ImageCarousel: View {
             VStack {
                 Spacer(minLength: 0)
                 
-                if let inset = self.viewModel.getImageInset() {
+                if let inset = self.imageDimensions.inset {
                     self.getInsetImage(image, inset: inset, geometry: geometry)
                 } else {
                     self.getImage(image, geometry: geometry)
@@ -67,7 +73,7 @@ struct ImageCarousel: View {
     
     private func getInsetImage(_ image: IdentifiableImage, inset: CGFloat, geometry: GeometryProxy) -> some View {
         HStack(alignment: .top) {
-            let size = self.viewModel.getImageSize(for: geometry)
+            let size = self.viewModel.getImageSize(for: geometry, imageDimensions: self.imageDimensions)
             let width = size.width
             let height = size.height
             
@@ -85,7 +91,7 @@ struct ImageCarousel: View {
     }
     
     private func getImage(_ image: IdentifiableImage, geometry: GeometryProxy) -> some View {
-        let size = self.viewModel.getImageSize(for: geometry)
+        let size = self.viewModel.getImageSize(for: geometry, imageDimensions: self.imageDimensions)
         let width = size.width
         let height = size.height
         
@@ -98,10 +104,13 @@ struct ImageCarousel: View {
     
     private func draggingChanged(_ newValue: DragGesture.Value, geometry: GeometryProxy) {
         let carouselDragValue = self.viewModel.getDragValue(for: newValue,
-                                                             currentOffset: self.offset,
-                                                             imageCount: self.images.count,
-                                                             geometry: geometry)
+                                                            currentOffset: self.offset,
+                                                            lastTranslation: self.lastTranslation,
+                                                            imageCount: self.totalImages,
+                                                            geometry: geometry,
+                                                            imageDimensions: self.imageDimensions)
         
+        self.lastTranslation = newValue.translation.width
         self.offset = carouselDragValue.offset
         self.currentImage = carouselDragValue.currentImage
     }
@@ -109,12 +118,13 @@ struct ImageCarousel: View {
     private func draggingEnded(_ finalValue: DragGesture.Value, geometry: GeometryProxy) {
         let carouselDragValue = self.viewModel.getFinalDragValue(for: finalValue,
                                                                  scrollOffset: self.offset,
+                                                                 lastTranslation: self.lastTranslation,
                                                                  geometry: geometry,
-                                                                 imageCount: self.images.count)
+                                                                 imageCount: self.totalImages,
+                                                                 imageDimensions: self.imageDimensions)
+        self.lastTranslation = 0
         
         self.currentImage = carouselDragValue.currentImage
-        withAnimation {
-            self.offset = carouselDragValue.offset
-        }
+        withAnimation { self.offset = carouselDragValue.offset }
     }
 }

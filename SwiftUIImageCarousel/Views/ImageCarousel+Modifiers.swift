@@ -8,9 +8,10 @@
 import SwiftUI
 
 extension ImageCarousel {
-    func imageDimensions(inset: CGFloat? = nil, width: CGFloat? = nil, aspectRatio: CGFloat? = nil) -> ImageCarousel {
+    func withDimensions(inset: CGFloat? = nil, width: CGFloat? = nil, aspectRatio: CGFloat? = nil) -> ImageCarousel {
         var mutable = self
-        mutable.viewModel = ImageCarouselViewModel(imageInset: inset, imageWidth: width, aspectRatio: aspectRatio)
+        let dimensions = ImageDimensions(width: width, inset: inset, aspectRatio: aspectRatio)
+        mutable.imageDimensions = dimensions
         return mutable
     }
     

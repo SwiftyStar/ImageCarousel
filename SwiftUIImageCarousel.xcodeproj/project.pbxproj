@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5638E96265DD0030030E95B /* ImageDimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5638E95265DD0030030E95B /* ImageDimensions.swift */; };
 		A5CE876F2651DDDC00C9C77B /* ImageCarouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */; };
 		A5CF09002657239B003F00FE /* CarouselDragValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */; };
+		A5CFC2E9265C82FA00057434 /* ImageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CFC2E8265C82FA00057434 /* ImageResponse.swift */; };
+		A5CFC2EB265C840A00057434 /* ExampleScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CFC2EA265C840A00057434 /* ExampleScreenViewModel.swift */; };
 		A5DF36852655DB7B0093CB12 /* ImageCarousel+Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF36842655DB7B0093CB12 /* ImageCarousel+Modifiers.swift */; };
 		A5DF36872655EF6B0093CB12 /* CarouselPagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF36862655EF6B0093CB12 /* CarouselPagingView.swift */; };
 		A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */; };
@@ -20,8 +23,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A5638E95265DD0030030E95B /* ImageDimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDimensions.swift; sourceTree = "<group>"; };
 		A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselViewModel.swift; sourceTree = "<group>"; };
 		A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselDragValue.swift; sourceTree = "<group>"; };
+		A5CFC2E8265C82FA00057434 /* ImageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResponse.swift; sourceTree = "<group>"; };
+		A5CFC2EA265C840A00057434 /* ExampleScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleScreenViewModel.swift; sourceTree = "<group>"; };
 		A5DF36842655DB7B0093CB12 /* ImageCarousel+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageCarousel+Modifiers.swift"; sourceTree = "<group>"; };
 		A5DF36862655EF6B0093CB12 /* CarouselPagingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselPagingView.swift; sourceTree = "<group>"; };
 		A5E60444264D5D60003AA821 /* SwiftUIImageCarousel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIImageCarousel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				A5CE876E2651DDDC00C9C77B /* ImageCarouselViewModel.swift */,
+				A5CFC2EA265C840A00057434 /* ExampleScreenViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -115,6 +122,8 @@
 			children = (
 				A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */,
 				A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */,
+				A5CFC2E8265C82FA00057434 /* ImageResponse.swift */,
+				A5638E95265DD0030030E95B /* ImageDimensions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -189,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5DF36852655DB7B0093CB12 /* ImageCarousel+Modifiers.swift in Sources */,
+				A5CFC2EB265C840A00057434 /* ExampleScreenViewModel.swift in Sources */,
 				A5E6045B264D6423003AA821 /* ImageCarousel.swift in Sources */,
 				A5CE876F2651DDDC00C9C77B /* ImageCarouselViewModel.swift in Sources */,
 				A5CF09002657239B003F00FE /* CarouselDragValue.swift in Sources */,
@@ -196,6 +206,8 @@
 				A5E6044A264D5D60003AA821 /* ExampleScreen.swift in Sources */,
 				A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */,
 				A5E60464264D6BC5003AA821 /* IdentifiableImage.swift in Sources */,
+				A5638E96265DD0030030E95B /* ImageDimensions.swift in Sources */,
+				A5CFC2E9265C82FA00057434 /* ImageResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

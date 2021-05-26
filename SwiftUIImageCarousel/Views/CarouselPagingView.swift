@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct CarouselPagingView: View {
-    @Binding var images: [IdentifiableImage]
     @Binding var currentImage: Int
+    let totalImages: Int
     
-    private let circleDiameter: CGFloat = 10
+    private let circleDiameter: CGFloat = 8
     
     private var unselectedCircle: some View {
         Circle()
@@ -27,42 +27,35 @@ struct CarouselPagingView: View {
     
     var body: some View {
         HStack {
-            ForEach(self.images) { image in
+            ForEach(0..<self.totalImages) { index in
                 Group {
-                    if self.isSelected(image) {
+                    if self.isSelected(index) {
                         self.selectedCircle
                     } else {
                         self.unselectedCircle
                     }
                     
-                    if !self.isLastImage(image) {
+                    if !self.isLastImage(index) {
                         Spacer()
-                            .frame(width: 2)
+                            .frame(width: 8)
                     }
                 }
             }
         }
     }
     
-    private func isSelected(_ image: IdentifiableImage) -> Bool {
-        let currentImage = self.currentImage
-        guard currentImage < self.images.count,
-              currentImage >= 0
-        else { return false }
-        
-        let selectedImage = self.images[self.currentImage]
-        return image.id == selectedImage.id
+    private func isSelected(_ index: Int) -> Bool {
+        return index == self.currentImage
     }
     
-    private func isLastImage(_ image: IdentifiableImage) -> Bool {
-        guard let lastImage = self.images.last else { return true }
-        
-        return image.id == lastImage.id
+    private func isLastImage(_ index: Int) -> Bool {
+        let lastIndex = self.totalImages - 1
+        return index == lastIndex
     }
 }
 
 struct CarouselPagingView_Previews: PreviewProvider {
     static var previews: some View {
-        CarouselPagingView(images: .constant(IdentifiableImage.testImages), currentImage: .constant(0))
+        CarouselPagingView(currentImage: .constant(0), totalImages: 3)
     }
 }
