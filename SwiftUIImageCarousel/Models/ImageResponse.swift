@@ -16,7 +16,13 @@ struct ImageResponse {
                      "Kitten2",
                      "Kitten3",
                      "Kitten4",
-                     "Kitten5"]
+                     "Kitten5",
+                     "Kitten1",
+                     "Kitten2",
+                     "Kitten3",
+                     "Kitten4",
+                     "Kitten5"
+        ]
         
         return ImageResponse(imageNames: names)
     }()

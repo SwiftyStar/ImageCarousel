@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct CarouselDragValue {
+struct CarouselDragValue: Equatable {
     let offset: CGFloat
-    let currentImage: Int
+    let imageIndex: Int
+    let dragStartDate: Date?
 }

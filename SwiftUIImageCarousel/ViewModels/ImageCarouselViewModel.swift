@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-final class ImageCarouselViewModel {
+struct ImageCarouselViewModel {
         
     func getImageSize(for geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CGSize {
         let totalInset = 2 * (imageDimensions.inset ?? 0)
@@ -27,56 +27,111 @@ final class ImageCarouselViewModel {
         return CGSize(width: width, height: height)
     }
     
-    func getDragValue(for dragValue: DragGesture.Value, currentOffset: CGFloat, lastTranslation: CGFloat, imageCount: Int, geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CarouselDragValue {
-        let newTranslationWidth = self.getNewTranslationWidth(for: dragValue, lastTranslation: lastTranslation)
+    func getDragValue(for dragValue: DragGesture.Value, lastOffset: CGFloat, carouselDragValue: CarouselDragValue, imageCount: Int, geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CarouselDragValue {
+        let newOffset = lastOffset + dragValue.translation.width
+        let fullImageWidth = self.getFullImageWidth(for: geometry, imageDimensions: imageDimensions)
         
-        let newOffset = currentOffset + newTranslationWidth
         let constrainedOffset = self.getConstrainedOffset(newOffset,
                                                           imageCount: imageCount,
-                                                          geometry: geometry,
-                                                          imageDimensions: imageDimensions,
+                                                          fullImageWidth: fullImageWidth,
                                                           isDragging: true)
-        let currentImage = self.getCurrentImage(for: constrainedOffset,
-                                                geometry: geometry,
-                                                imageDimensions: imageDimensions)
         
-        return CarouselDragValue(offset: constrainedOffset, currentImage: currentImage)
+        let imageIndex = self.getImageIndex(for: constrainedOffset,
+                                            fullImageWidth: fullImageWidth,
+                                            imageCount: imageCount)
+        
+        return CarouselDragValue(offset: constrainedOffset,
+                                 imageIndex: imageIndex,
+                                 dragStartDate: carouselDragValue.dragStartDate ?? dragValue.time)
     }
     
-    func getFinalDragValue(for dragValue: DragGesture.Value, scrollOffset: CGFloat, lastTranslation: CGFloat, geometry: GeometryProxy, imageCount: Int, imageDimensions: ImageDimensions) -> CarouselDragValue {
-        let totalWidthOfEachImage = self.getTotalWidthOfEachImage(for: geometry, imageDimensions: imageDimensions)
-        let safeWidth = max(totalWidthOfEachImage, 1) // Avoid division by 0 for edge cases
-        let finalTranslationWidth = self.getNewTranslationWidth(for: dragValue, lastTranslation: lastTranslation)
+    func getFinalDragValue(for dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, lastIndex: Int, geometry: GeometryProxy, imageCount: Int, imageDimensions: ImageDimensions) -> CarouselDragValue {
+        let fullImageWidth = self.getFullImageWidth(for: geometry, imageDimensions: imageDimensions)
+        let safeWidth = max(fullImageWidth, 1) // Avoid division by 0 for edge cases
         
-        let finalScrollOffset = scrollOffset + finalTranslationWidth
-        let numberOfImagesScrolled = finalScrollOffset / safeWidth
+        let numberOfImagesScrolled = carouselDragValue.offset / safeWidth
         let roundedNumberOfImages = round(Double(numberOfImagesScrolled))
-        let totalOffset = CGFloat(roundedNumberOfImages) * totalWidthOfEachImage
+        let finalScrolledOffset = CGFloat(roundedNumberOfImages) * fullImageWidth
         
-        let constrainedOffset = self.getConstrainedOffset(totalOffset,
-                                                          imageCount: imageCount,
-                                                          geometry: geometry,
-                                                          imageDimensions: imageDimensions,
-                                                          isDragging: false)
-        let currentImage = self.getCurrentImage(for: constrainedOffset,
-                                                geometry: geometry,
-                                                imageDimensions: imageDimensions)
+        let currentScrolledOffset = self.getConstrainedOffset(finalScrolledOffset,
+                                                              imageCount: imageCount,
+                                                              fullImageWidth: fullImageWidth,
+                                                              isDragging: false)
         
-        return CarouselDragValue(offset: constrainedOffset, currentImage: currentImage)
+        let scrolledImageIndex = self.getImageIndex(for: currentScrolledOffset,
+                                                    fullImageWidth: fullImageWidth,
+                                                    imageCount: imageCount)
+                
+        return self.getFinalValueConsideringVelocity(dragValue: dragValue,
+                                                     carouselDragValue: carouselDragValue,
+                                                     lastIndex: lastIndex,
+                                                     currentScrolledOffset: currentScrolledOffset,
+                                                     scrolledImageIndex: scrolledImageIndex,
+                                                     imageCount: imageCount,
+                                                     fullImageWidth: fullImageWidth)
     }
     
-    private func getCurrentImage(for offset: CGFloat, geometry: GeometryProxy, imageDimensions: ImageDimensions) -> Int {
-        let totalWidthOfEachImage = self.getTotalWidthOfEachImage(for: geometry, imageDimensions: imageDimensions)
-        let safeWidth = max(totalWidthOfEachImage, 1) // Avoid division by 0
+    private func getFinalValueConsideringVelocity(dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, lastIndex: Int, currentScrolledOffset: CGFloat, scrolledImageIndex: Int, imageCount: Int, fullImageWidth: CGFloat) -> CarouselDragValue {
+        let finalOffset: CGFloat
+        let finalIndex: Int
+        let threshold: CGFloat = 500
+        let velocity = self.getDragVelocity(dragValue, dragStartDate: carouselDragValue.dragStartDate)
+        
+        if scrolledImageIndex != lastIndex {
+            finalOffset = currentScrolledOffset
+            finalIndex = scrolledImageIndex
+        } else if velocity < -threshold {
+            let nextIndex = carouselDragValue.imageIndex + 1
+            let maxIndex = imageCount - 1
+            let constrainedNextIndex = min(nextIndex, maxIndex)
+            let offset = -(CGFloat(constrainedNextIndex) * fullImageWidth)
+            
+            finalIndex = constrainedNextIndex
+            finalOffset = self.getConstrainedOffset(offset,
+                                                    imageCount: imageCount,
+                                                    fullImageWidth: fullImageWidth,
+                                                    isDragging: false)
+        } else if velocity > threshold {
+            let previousIndex = carouselDragValue.imageIndex - 1
+            let constrainedPreviousIndex = max(previousIndex, 0)
+            let offset = -(CGFloat(constrainedPreviousIndex) * fullImageWidth)
+            
+            finalIndex = constrainedPreviousIndex
+            finalOffset = self.getConstrainedOffset(offset,
+                                                    imageCount: imageCount,
+                                                    fullImageWidth: fullImageWidth,
+                                                    isDragging: false)
+        } else {
+            finalOffset = currentScrolledOffset
+            finalIndex = carouselDragValue.imageIndex
+        }
+        
+        return CarouselDragValue(offset: finalOffset, imageIndex: finalIndex, dragStartDate: nil)
+    }
+    
+    private func getDragVelocity(_ value: DragGesture.Value, dragStartDate: Date?) -> CGFloat {
+        guard let dragStart = dragStartDate else { return 0 }
+        
+        let timeDifference = abs(value.time.distance(to: dragStart))
+        let width = value.translation.width
+        
+        return width / CGFloat(timeDifference)
+    }
+    
+    private func getImageIndex(for offset: CGFloat, fullImageWidth: CGFloat, imageCount: Int) -> Int {
+        let safeWidth = max(fullImageWidth, 1) // Avoid division by 0
         let numberOfImagesScrolled = -offset / safeWidth // Scrolling forward gives negative offset
-        return Int(round(Double(numberOfImagesScrolled)))
+        let index = Int(round(Double(numberOfImagesScrolled)))
+        let maxIndex = imageCount - 1
+        let constrainedIndex = min(max(index, 0), maxIndex)
+        
+        return constrainedIndex
     }
     
-    private func getConstrainedOffset(_ offset: CGFloat, imageCount: Int, geometry: GeometryProxy, imageDimensions: ImageDimensions, isDragging: Bool) -> CGFloat {
-        let totalWidthOfEachImage = self.getTotalWidthOfEachImage(for: geometry, imageDimensions: imageDimensions)
+    private func getConstrainedOffset(_ offset: CGFloat, imageCount: Int, fullImageWidth: CGFloat, isDragging: Bool) -> CGFloat {
         let maxImagesToBeOffset = imageCount - 1 // If we offset N - 1 images, then the last will be visible
         
-        var minOffset = -(totalWidthOfEachImage * CGFloat(maxImagesToBeOffset))
+        var minOffset = -(fullImageWidth * CGFloat(maxImagesToBeOffset))
         var maxOffset = CGFloat.zero
         
         if isDragging {
@@ -87,13 +142,9 @@ final class ImageCarouselViewModel {
         return max(min(offset, maxOffset), minOffset)
     }
     
-    private func getTotalWidthOfEachImage(for geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CGFloat {
+    private func getFullImageWidth(for geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CGFloat {
         let widthOfEachImage = self.getImageSize(for: geometry, imageDimensions: imageDimensions).width
         let insetForEachImage = 2 * (imageDimensions.inset ?? 0)
         return widthOfEachImage + insetForEachImage
-    }
-    
-    private func getNewTranslationWidth(for value: DragGesture.Value, lastTranslation: CGFloat) -> CGFloat {
-        return value.translation.width - lastTranslation
     }
 }

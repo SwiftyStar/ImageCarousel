@@ -19,7 +19,6 @@
 		A5E6044C264D5D61003AA821 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E6044B264D5D61003AA821 /* Assets.xcassets */; };
 		A5E6044F264D5D61003AA821 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E6044E264D5D61003AA821 /* Preview Assets.xcassets */; };
 		A5E6045B264D6423003AA821 /* ImageCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E6045A264D6423003AA821 /* ImageCarousel.swift */; };
-		A5E60464264D6BC5003AA821 /* IdentifiableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +36,6 @@
 		A5E6044E264D5D61003AA821 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A5E60450264D5D61003AA821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5E6045A264D6423003AA821 /* ImageCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarousel.swift; sourceTree = "<group>"; };
-		A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,11 +68,11 @@
 		A5E60446264D5D60003AA821 /* SwiftUIImageCarousel */ = {
 			isa = PBXGroup;
 			children = (
+				A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */,
 				A5E60457264D607D003AA821 /* Screens */,
 				A5E60458264D6083003AA821 /* Views */,
 				A5E60462264D6BB0003AA821 /* Models */,
 				A5E60459264D6087003AA821 /* ViewModels */,
-				A5E60447264D5D60003AA821 /* SwiftUIImageCarouselApp.swift */,
 				A5E6044B264D5D61003AA821 /* Assets.xcassets */,
 				A5E60450264D5D61003AA821 /* Info.plist */,
 				A5E6044D264D5D61003AA821 /* Preview Content */,
@@ -120,7 +118,6 @@
 		A5E60462264D6BB0003AA821 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A5E60463264D6BC5003AA821 /* IdentifiableImage.swift */,
 				A5CF08FF2657239B003F00FE /* CarouselDragValue.swift */,
 				A5CFC2E8265C82FA00057434 /* ImageResponse.swift */,
 				A5638E95265DD0030030E95B /* ImageDimensions.swift */,
@@ -205,7 +202,6 @@
 				A5DF36872655EF6B0093CB12 /* CarouselPagingView.swift in Sources */,
 				A5E6044A264D5D60003AA821 /* ExampleScreen.swift in Sources */,
 				A5E60448264D5D60003AA821 /* SwiftUIImageCarouselApp.swift in Sources */,
-				A5E60464264D6BC5003AA821 /* IdentifiableImage.swift in Sources */,
 				A5638E96265DD0030030E95B /* ImageDimensions.swift in Sources */,
 				A5CFC2E9265C82FA00057434 /* ImageResponse.swift in Sources */,
 			);

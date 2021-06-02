@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CarouselPagingView: View {
-    @Binding var currentImage: Int
+    @Binding var carouselDragValue: CarouselDragValue
     let totalImages: Int
     
     private let circleDiameter: CGFloat = 8
@@ -45,7 +45,7 @@ struct CarouselPagingView: View {
     }
     
     private func isSelected(_ index: Int) -> Bool {
-        return index == self.currentImage
+        return index == self.carouselDragValue.imageIndex
     }
     
     private func isLastImage(_ index: Int) -> Bool {
@@ -56,6 +56,6 @@ struct CarouselPagingView: View {
 
 struct CarouselPagingView_Previews: PreviewProvider {
     static var previews: some View {
-        CarouselPagingView(currentImage: .constant(0), totalImages: 3)
+        CarouselPagingView(carouselDragValue: .constant(CarouselDragValue(offset: 0, imageIndex: 0, dragStartDate: nil)), totalImages: 3)
     }
 }
