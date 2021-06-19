@@ -27,8 +27,8 @@ struct ImageCarouselViewModel {
         return CGSize(width: width, height: height)
     }
     
-    func getDragValue(for dragValue: DragGesture.Value, lastOffset: CGFloat, carouselDragValue: CarouselDragValue, imageCount: Int, geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CarouselDragValue {
-        let newOffset = lastOffset + dragValue.translation.width
+    func getDragValue(for dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, imageCount: Int, geometry: GeometryProxy, imageDimensions: ImageDimensions) -> CarouselDragValue {
+        let newOffset = carouselDragValue.previousOffset + dragValue.translation.width
         let fullImageWidth = self.getFullImageWidth(for: geometry, imageDimensions: imageDimensions)
         
         let constrainedOffset = self.getConstrainedOffset(newOffset,
@@ -42,10 +42,12 @@ struct ImageCarouselViewModel {
         
         return CarouselDragValue(offset: constrainedOffset,
                                  imageIndex: imageIndex,
-                                 dragStartDate: carouselDragValue.dragStartDate ?? dragValue.time)
+                                 dragStartDate: carouselDragValue.dragStartDate ?? dragValue.time,
+                                 previousOffset: carouselDragValue.previousOffset,
+                                 previousImageIndex: carouselDragValue.previousImageIndex)
     }
     
-    func getFinalDragValue(for dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, lastIndex: Int, geometry: GeometryProxy, imageCount: Int, imageDimensions: ImageDimensions) -> CarouselDragValue {
+    func getFinalDragValue(for dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, geometry: GeometryProxy, imageCount: Int, imageDimensions: ImageDimensions) -> CarouselDragValue {
         let fullImageWidth = self.getFullImageWidth(for: geometry, imageDimensions: imageDimensions)
         let safeWidth = max(fullImageWidth, 1) // Avoid division by 0 for edge cases
         
@@ -64,20 +66,19 @@ struct ImageCarouselViewModel {
                 
         return self.getFinalValueConsideringVelocity(dragValue: dragValue,
                                                      carouselDragValue: carouselDragValue,
-                                                     lastIndex: lastIndex,
                                                      currentScrolledOffset: currentScrolledOffset,
                                                      scrolledImageIndex: scrolledImageIndex,
                                                      imageCount: imageCount,
                                                      fullImageWidth: fullImageWidth)
     }
     
-    private func getFinalValueConsideringVelocity(dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, lastIndex: Int, currentScrolledOffset: CGFloat, scrolledImageIndex: Int, imageCount: Int, fullImageWidth: CGFloat) -> CarouselDragValue {
+    private func getFinalValueConsideringVelocity(dragValue: DragGesture.Value, carouselDragValue: CarouselDragValue, currentScrolledOffset: CGFloat, scrolledImageIndex: Int, imageCount: Int, fullImageWidth: CGFloat) -> CarouselDragValue {
         let finalOffset: CGFloat
         let finalIndex: Int
         let threshold: CGFloat = 500
         let velocity = self.getDragVelocity(dragValue, dragStartDate: carouselDragValue.dragStartDate)
         
-        if scrolledImageIndex != lastIndex {
+        if scrolledImageIndex != carouselDragValue.previousImageIndex {
             finalOffset = currentScrolledOffset
             finalIndex = scrolledImageIndex
         } else if velocity < -threshold {
@@ -106,7 +107,11 @@ struct ImageCarouselViewModel {
             finalIndex = carouselDragValue.imageIndex
         }
         
-        return CarouselDragValue(offset: finalOffset, imageIndex: finalIndex, dragStartDate: nil)
+        return CarouselDragValue(offset: finalOffset,
+                                 imageIndex: finalIndex,
+                                 dragStartDate: nil,
+                                 previousOffset: finalOffset,
+                                 previousImageIndex: finalIndex)
     }
     
     private func getDragVelocity(_ value: DragGesture.Value, dragStartDate: Date?) -> CGFloat {

@@ -9,7 +9,11 @@ import SwiftUI
 
 struct ExampleScreen: View {
     @ObservedObject private var viewModel = ExampleScreenViewModel()
-    @State private var carouselDragValue = CarouselDragValue(offset: 0, imageIndex: 0, dragStartDate: nil)
+    @State private var carouselDragValue = CarouselDragValue(offset: 0,
+                                                             imageIndex: 0,
+                                                             dragStartDate: nil,
+                                                             previousOffset: 0,
+                                                             previousImageIndex: 0)
     
     private var titleText: some View {
         Group {

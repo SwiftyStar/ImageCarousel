@@ -11,4 +11,6 @@ struct CarouselDragValue: Equatable {
     let offset: CGFloat
     let imageIndex: Int
     let dragStartDate: Date?
+    let previousOffset: CGFloat
+    let previousImageIndex: Int
 }

@@ -56,6 +56,7 @@ struct CarouselPagingView: View {
 
 struct CarouselPagingView_Previews: PreviewProvider {
     static var previews: some View {
-        CarouselPagingView(carouselDragValue: .constant(CarouselDragValue(offset: 0, imageIndex: 0, dragStartDate: nil)), totalImages: 3)
+        let carouselDragValue = CarouselDragValue(offset: 0, imageIndex: 0, dragStartDate: nil, previousOffset: 0, previousImageIndex: 0)
+        CarouselPagingView(carouselDragValue: .constant(carouselDragValue), totalImages: 3)
     }
 }

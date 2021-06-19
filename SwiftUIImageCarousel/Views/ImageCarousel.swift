@@ -15,8 +15,6 @@ struct ImageCarousel: View {
     let totalImages: Int
 
     private let viewModel: ImageCarouselViewModel = ImageCarouselViewModel()
-    @State private var lastOffset: CGFloat
-    @State private var lastImageIndex: Int
     
     var onImageTap: ImageTapAction?
     var hasPaging: Bool = false
@@ -26,8 +24,6 @@ struct ImageCarousel: View {
         self._images = images
         self.totalImages = totalImages
         self._carouselDragValue = carouselDragValue
-        self._lastOffset = State(initialValue: carouselDragValue.wrappedValue.offset)
-        self._lastImageIndex = State(initialValue: carouselDragValue.wrappedValue.imageIndex)
     }
     
     private var carousel: some View {
@@ -59,8 +55,8 @@ struct ImageCarousel: View {
     
     private func getContent(for geometry: GeometryProxy) -> some View {
         ForEach(0..<self.totalImages) { index in
-            let haveImage = index < self.images.count
             ZStack {
+                let haveImage = index < self.images.count
                 if haveImage {
                     self.getImageView(at: index, geometry: geometry)
                 }
@@ -133,7 +129,6 @@ struct ImageCarousel: View {
     
     private func draggingChanged(_ newValue: DragGesture.Value, geometry: GeometryProxy) {
         let newDragValue = self.viewModel.getDragValue(for: newValue,
-                                                       lastOffset: self.lastOffset,
                                                        carouselDragValue: self.carouselDragValue,
                                                        imageCount: self.totalImages,
                                                        geometry: geometry,
@@ -145,13 +140,10 @@ struct ImageCarousel: View {
     private func draggingEnded(_ finalValue: DragGesture.Value, geometry: GeometryProxy) {
         let finalDragValue = self.viewModel.getFinalDragValue(for: finalValue,
                                                               carouselDragValue: self.carouselDragValue,
-                                                              lastIndex: self.lastImageIndex,
                                                               geometry: geometry,
                                                               imageCount: self.totalImages,
                                                               imageDimensions: self.imageDimensions)
-        
-        self.lastOffset = finalDragValue.offset
-        self.lastImageIndex = finalDragValue.imageIndex
+
         withAnimation(.linear(duration: 0.2)) { self.carouselDragValue = finalDragValue }
     }
 }
