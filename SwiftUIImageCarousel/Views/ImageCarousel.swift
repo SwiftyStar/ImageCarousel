@@ -33,8 +33,8 @@ struct ImageCarousel: View {
                     .offset(x: self.carouselDragValue.offset)
             }
             .gesture(
-                DragGesture()
-                    .onChanged { self.draggingChanged($0, geometry: geometry)}
+                DragGesture(minimumDistance: 0.0)
+                    .onChanged { self.draggingChanged($0, geometry: geometry) }
                     .onEnded { self.draggingEnded($0, geometry: geometry)}
             )
         }
