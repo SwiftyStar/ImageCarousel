@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ExampleScreen: View {
-    private let viewModel = ExampleScreenViewModel()
-    @State private var images: [Image] = []
+    @ObservedObject private var viewModel = ExampleScreenViewModel()
     @State private var carouselDragValue = CarouselDragValue(offset: 0, imageIndex: 0, dragStartDate: nil)
     
     private var titleText: some View {
@@ -24,7 +23,7 @@ struct ExampleScreen: View {
     var body: some View {
         VStack {
             let aspectRatio: CGFloat = 4 / 3
-            ImageCarousel(images: self.$images, carouselDragValue: self.$carouselDragValue, totalImages: self.viewModel.getImageCount())
+            ImageCarousel(images: self.$viewModel.loadedImages, carouselDragValue: self.$carouselDragValue, totalImages: self.viewModel.getImageCount())
                 .onImageTap(self.imageTapped)
                 .withDimensions(inset: 8, aspectRatio: aspectRatio)
                 .hasPaging(true)
@@ -32,19 +31,13 @@ struct ExampleScreen: View {
             
             self.titleText
         }
-        .onAppear { self.loadImages(currentImage: self.carouselDragValue.imageIndex) }
-        .onChange(of: self.carouselDragValue) { self.loadImages(currentImage: $0.imageIndex) }
-    }
-    
-    private func loadImages(currentImage: Int) {
-        self.viewModel.lazyLoadImages(currentImage: currentImage) { newImages in
-            self.images = newImages
-        }
+        .onAppear { self.viewModel.lazyLoadImages(currentImage: self.carouselDragValue.imageIndex) }
+        .onChange(of: self.carouselDragValue) { self.viewModel.lazyLoadImages(currentImage: $0.imageIndex) }
     }
     
     private func imageTapped(_ index: Int?) {
         guard let index = index,
-              index < self.images.count
+              index < self.viewModel.loadedImages.count
         else { return }
         
         print(index)
